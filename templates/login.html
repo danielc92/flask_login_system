@@ -31,7 +31,7 @@
                 <a class = "btn btn-light" href = "{{ url_for('register') }}">Sign Up</a>
             </div>
             {% if error %}
-            <p class="text-warning mt-2 small"><strong>Error:</strong> {{ error }} {% else %}
+            <p class="badge badge-light text-danger p-2 mt-3"><strong>Error:</strong> {{ error }} {% else %}
                 <p class="mt-2 small"></p>
                 {% endif %}
         </form>
