@@ -55,17 +55,16 @@ def login():
         else:
 
             if users.shape[0] > 0:
-                try:
-                    database_password = users.loc[0, 'passowrd_']
-                    print("Database password is {}, attempted password is {}".format(database_password, posted_password))
-                    if database_password == posted_password:
-                        session['logged_in'] = True
-                        session['username'] = posted_login
-                        print("user details are correct!")
-                        return redirect(url_for('home'))
-                except:
+                database_password = users.loc[0, 'passowrd_']
+                print("Database password is {}, attempted password is {}".format(database_password, posted_password))
+                if database_password == posted_password:
+                    session['logged_in'] = True
+                    session['username'] = posted_login
+                    return redirect(url_for('home'))
+                else:
                     error = "Password is incorrect. Try again"
                     return render_template('login.html', error=error)
+
             else:
                 error = "User does not exist"
                 return render_template('login.html', error=error)
