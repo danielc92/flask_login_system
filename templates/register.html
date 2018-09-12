@@ -13,42 +13,43 @@
   <body>
     <div class="container text-center">
         <h2>Register Here</h2>
-        <form class="p-5 text-left bg-danger mx-auto my-auto rounded" action="" method="post">
+        <form class="p-5 text-left bg-primary mx-auto my-auto rounded" action="" method="post">
             <div class="form-group">
                 <label class = "text-light mr-2">Username:</label>
-                <input type="text" name="username" value="{{
-              request.form.username }}">
+                <input type="text" name="rusername" value="{{
+              request.form.rusername }}">
             </div>
             <div class="form-group">
                 <label class = "text-light mr-2">Password:</label>
-                <input type="password" name="password" value="{{
-              request.form.password }}">
+                <input type="password" name="rpassword" value="{{
+              request.form.rpassword }}">
             </div>
 
             <div class="form-group">
                 <label class = "text-light mr-2">First Name:</label>
-                <input type="text" name="firstname" value="{{
-              request.form.firstname }}">
+                <input type="text" name="rfirst" value="{{
+              request.form.rfirst }}">
             </div>
 
             <div class="form-group">
                 <label class = "text-light mr-2">Last Name:</label>
-                <input type="password" name="password" value="{{
-              request.form.lastname }}">
+                <input type="text" name="rlast" value="{{
+              request.form.rlast }}">
             </div>
 
             <div class="form-group">
                 <label class = "text-light mr-2">Email:</label>
-                <input type="password" name="password" value="{{
-              request.form.email }}">
+                <input type="text" name="remail" value="{{
+              request.form.remail }}">
             </div>
             <div>
-                <input class="btn btn-light" type="submit" value="Register">
+                <input class="btn btn-light" type="submit" value="Submit">
             </div>
             {% if error %}
-            <p class="text-warning mt-2 small"><strong>Error:</strong> {{ error }} {% else %}
+                <p class="badge badge-light text-dark mt-2 p-2"> {{ error }} </p> 
+            {% else %}
                 <p class="mt-2 small"></p>
-                {% endif %}
+            {% endif %}
         </form>
     </div>
 

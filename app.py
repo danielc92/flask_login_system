@@ -20,6 +20,11 @@ app.debug = True
 # Create database engine
 engine = create_engine('postgresql://danielcorcoran@localhost:5432/flask')
 
+# SQL skeletons
+select_skeleton = "SELECT * FROM users WHERE username_ = '{}'"
+insert_skeleton = "INSERT INTO users (username_, passowrd_, firstname_, lastname_, email)\
+             VALUES ('{}', '{}','{}','{}','{}')"
+
 # Login Required function
 def login_required(f):
     @wraps(f)
@@ -40,7 +45,7 @@ def login():
         
         posted_login = request.form['username']
         posted_password = request.form['password']
-        select_skeleton = "SELECT * FROM users WHERE username_ = '{}'"
+        
         users = pandas.read_sql_query(select_skeleton.format(posted_login), con = engine)
 
         print(users)
@@ -52,10 +57,12 @@ def login():
             if users.shape[0] > 0:
                 try:
                     database_password = users.loc[0, 'passowrd_']
-                    print(database_password)
-                    session['logged_in'] = True
-                    session['username'] = posted_login
-                    return render_template('home.html', user = session['username'])
+                    print("Database password is {}, attempted password is {}".format(database_password, posted_password))
+                    if database_password == posted_password:
+                        session['logged_in'] = True
+                        session['username'] = posted_login
+                        print("user details are correct!")
+                        return redirect(url_for('home'))
                 except:
                     error = "Password is incorrect. Try again"
                     return render_template('login.html', error=error)
@@ -65,11 +72,55 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/register')
+def chkln(word):
+    if len(word)>0:
+        return True
+    else:
+        return False
+# Register Route
+@app.route('/register', methods = ['GET', 'POST'])
 def register():
-    return render_template('register.html')
 
+    error = None
+
+    if request.method == "POST":
+
+        r_username = request.form['rusername']
+        r_password = request.form['rpassword']
+        r_first = request.form['rfirst']
+        r_last = request.form['rlast']
+        r_email = request.form['remail']
+
+        if chkln(r_username) ==True and chkln(r_password)==True and chkln(r_first)==True and chkln(r_last)==True and chkln(r_email)==True:
+            
+            conn = engine.connect()
+            trans = conn.begin()
+            conn.execute(insert_skeleton.format(r_username, 
+                r_password,
+                r_first,
+                r_last,
+                r_email))
+            trans.commit()
+            conn.close()
+
+            time.sleep(3)
+            return redirect(url_for('login'))
+        else:
+            error = "You must fill in all fields"
+            return render_template('register.html', error = error)
+
+    return render_template('register.html', error = "Enter details to register")
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
+# Home Route
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    return render_template('home.html', user = session['username'])
+
