@@ -7,35 +7,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+
     <title>Login</title>
+
 </head>
 
-<body>
-    <div class="container text-center">
-        <h2>Login Here</h2>
-        <form class="p-2 text-center bg-primary mx-auto my-auto rounded" action="" method="post" style = "width:600px; ">
+<body class = "bg-blur">
+        <form class="form-box p-2 text-secondary text-center bg-light my-5 mx-auto" action="" method="post" style = "width:500px; ">
+            <h4 class = "my-3">Login Page</h4>
             <div class="form-group">
-                <label class = "text-light">Username:</label>
+                <label>Username:</label>
                 <br>
                 <input type="text" name="username" value="{{
               request.form.username }}">
             </div>
             <div class="form-group">
-                <label class = "text-light">Password:</label>
+                <label>Password:</label>
                 <br>
                 <input type="password" name="password" value="{{
               request.form.password }}">
             </div>
             <div>
-                <input class="btn btn-light" type="submit" value="Login">
-                <a class = "btn btn-light" href = "{{ url_for('register') }}">Sign Up</a>
+                <input class="btn btn-info px-4 py-2 my-2" type="submit" value="Login">
+                <br>
+                <a class = "small" href = "{{ url_for('register') }}">Not a member? Sign up here.</a>
             </div>
-            {% if error %}
-            <p class="badge badge-light text-danger p-2 mt-3"><strong>Error:</strong> {{ error }} {% else %}
-                <p class="mt-2 small"></p>
+                {% if error %}
+                <p class="badge badge-light text-danger p-2 mt-1"><strong>Error:</strong> {{ error }} </p> 
+                {% else %}
+                <p class="badge badge-light text-danger p-2 mt-1"></p>
                 {% endif %}
         </form>
-    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
