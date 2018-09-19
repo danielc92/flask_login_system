@@ -14,6 +14,7 @@ import time
 import re
 from string import ascii_letters
 from string import digits
+import hashlib
 
 # Validator functions
 
@@ -97,8 +98,11 @@ select_skeleton = "SELECT * FROM users WHERE username_ = '{}'"
 insert_skeleton = "INSERT INTO users (username_, passowrd_, firstname_, lastname_, email)\
              VALUES ('{}', '{}','{}','{}','{}')"
 
-# User exists
+def encrypt(a_password):
+    encrypted = hashlib.sha512(a_password.encode('utf-8')).hexdigest()
+    return encrypted
 
+# User exists
 def user_exists(username):
     userlist = pandas.read_sql_query(select_skeleton.format(username), con = engine)
     if userlist.shape[0] > 0:
@@ -138,7 +142,7 @@ def login():
             if users.shape[0] > 0:
                 database_password = users.loc[0, 'passowrd_']
                 print("Database password is {}, attempted password is {}".format(database_password, posted_password))
-                if database_password == posted_password:
+                if database_password == encrypt(posted_password):
                     session['logged_in'] = True
                     session['username'] = posted_login
                     return redirect(url_for('home'))
@@ -189,7 +193,7 @@ def register():
                             if validate_password(r_password) == False:
                                 conn = engine.connect()
                                 trans = conn.begin()
-                                conn.execute(insert_skeleton.format(r_username, r_password, r_first, r_last, r_email))
+                                conn.execute(insert_skeleton.format(r_username, encrypt(r_password), r_first, r_last, r_email))
                                 trans.commit()
                                 conn.close()
                                 return redirect(url_for('login'))
