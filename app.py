@@ -141,10 +141,12 @@ def login():
 
             if users.shape[0] > 0:
                 database_password = users.loc[0, 'passowrd_']
+                user_id = int(users.loc[0, 'id_'])
                 print("Database password is {}, attempted password is {}".format(database_password, posted_password))
                 if database_password == encrypt(posted_password):
                     session['logged_in'] = True
                     session['username'] = posted_login
+                    session['user_id'] = user_id
                     return redirect(url_for('home'))
                 else:
                     error = "Password is incorrect. Try again"
@@ -234,5 +236,5 @@ def logout():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html', user = session['username'])
+    return render_template('home.html', session = session)
 
