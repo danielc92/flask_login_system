@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Blog</title>
+</head>
+
+<body>
+    <div class="bg-primary">
+        <nav class="container navbar bg-transparent navbar-dark navbar-expand-lg">
+            <a class="navbar-brand" href="#">Daniel's Flask Blog Project</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+
+
+
+    <div class="container">
+
+
+
+
+        <h2 class="my-4">Posts</h2> 
+
+        {% for post in posts %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>{{ post.post_title }}</h5></div>
+            <div class="card-body">
+                <p>{{ post.post_content }}</p>
+                <div>
+                    <span class = "badge badge-primary">{{ post.post_date }}</span>
+                    <span class = "badge badge-primary">{{ post.post_username }}</span>
+                    <span class = "badge badge-primary">{{ post.post_category }}</span>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+
+        <h2 class="my-4">Submit Post</h2>
+        <form class="form" method="POST">
+            <div class="form-group">
+                <label>Post Title</label>
+                <input type="text" class="form-control" name="posttitle" placeholder="Title...">
+            </div>
+            <div class="form-group">
+                <label>Post Category</label>
+                <select class="form-control" name="postcategory">
+                    <option>Food</option>
+                    <option>Health</option>
+                    <option>Education</option>
+                    <option>Leisure</option>
+                    <option>Career</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleTextarea">Post Content</label>
+                <textarea class="form-control" name="postcontent" rows="3" placeholder="Post Content..."></textarea>
+            </div>
+            <input class="btn btn-primary px-4 py-2 my-2" type="submit" value="Submit Post">
+        </form>
+        {% if p_error %}
+            <p class = "text-danger">{{ p_error }}</p>
+        {% endif %}
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+
+</html>

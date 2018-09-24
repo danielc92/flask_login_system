@@ -5,6 +5,7 @@ using postgres as a backend system.
 
 from flask import Flask,render_template,url_for,redirect,request,session
 from datetime import timedelta
+import datetime
 from functools import wraps
 import json
 import pandas
@@ -85,6 +86,7 @@ def validate_email(email):
             invalid = False
             break
     return invalid
+
 # App config
 app = Flask(__name__)
 app.secret_key = 'jhgjjGDpifaj4904ufjajlwah89h392hi4lfknhflkh9842hfiu239h72h928b2ih2897b290f420j2khg2984hoklndjn2f3908h209d2'
@@ -97,6 +99,7 @@ engine = create_engine('postgresql://danielcorcoran@localhost:5432/flask')
 select_skeleton = "SELECT * FROM users WHERE username_ = '{}'"
 insert_skeleton = "INSERT INTO users (username_, passowrd_, firstname_, lastname_, email)\
              VALUES ('{}', '{}','{}','{}','{}')"
+
 
 def encrypt(a_password):
     encrypted = hashlib.sha512(a_password.encode('utf-8')).hexdigest()
@@ -163,6 +166,7 @@ def chkln(word):
         return True
     else:
         return False
+
 # Register Route
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -237,4 +241,56 @@ def logout():
 @login_required
 def home():
     return render_template('home.html', session = session)
+
+post_skeleton = "\
+        INSERT INTO posts (post_userid, post_username, post_title, post_content, post_date, post_category) \
+        VALUES ({}, '{}','{}','{}','{}', '{}')"
+
+# Blog Route
+@app.route('/blog',methods=['GET', 'POST'])
+@login_required
+def blog():
+    
+    p_error = None
+
+    if request.method == 'POST':
+
+        p_title = request.form['posttitle']
+        p_content = request.form['postcontent']
+
+        if len(p_title) >0 and len(p_content)>0:
+            checksql = "SELECT post_title FROM posts WHERE post_title = '{}'"
+            check_title = pandas.read_sql_query(checksql.format(p_title), con = engine)
+            if check_title.shape[0] >0:
+                p_error = "Post title exists."
+            else:
+                p_category = request.form['postcategory']
+                p_userid = session['user_id']
+                p_username = session['username']
+                p_date = datetime.datetime.now().strftime("%Y-%b-%d %H:%M:%S")
+
+                
+                conn = engine.connect()
+                trans = conn.begin()
+                conn.execute(post_skeleton.format(p_userid, 
+                    p_username,
+                    p_title, 
+                    p_content, 
+                    p_date, 
+                    p_category))
+                trans.commit()
+                conn.close()
+        else:
+
+            p_error = "You must have a post title and post content."
+
+        # print(p_title, p_category, p_content, p_userid, p_username, p_date, sep = "\n")
+        # print(type(p_title), type(p_category), type(p_content), type(p_userid), type(p_username), type(p_date))
+
+    posts_dataframe = pandas.read_sql_query("SELECT * FROM posts", con = engine)
+    posts = posts_dataframe.to_dict(orient = "records")
+
+    print(posts)
+
+    return render_template('blog.html', session = session, posts = posts, p_error = p_error)
 
