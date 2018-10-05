@@ -236,6 +236,11 @@ def logout():
     return redirect(url_for('login'))
 
 
+# Default Route
+@app.route('/')
+def default():
+    return redirect(url_for('home'))
+
 # Home Route
 @app.route('/home')
 @login_required
