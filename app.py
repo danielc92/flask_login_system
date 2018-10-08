@@ -1,6 +1,32 @@
 '''
 This app will consist of a login, register and home page
 using postgres as a backend system.
+
+POSTGRES SCRIPT TO CREATE DATABASE FOR THIS APP
+
+CREATE TABLE users
+(
+	id_ SERIAL PRIMARY KEY,
+	username_ VARCHAR(255),
+	password_ VARCHAR(255),
+	firstname_ VARCHAR(255),
+	lastname_ VARCHAR(255),
+	email_ VARCHAR(255)
+)
+
+CREATE TABLE posts
+(
+	post_id_ SERIAL PRIMARY KEY,
+	post_userid INTEGER,
+	post_usermame VARCHAR(255),
+	post_title VARCHAR(255),
+	post_content TEXT,
+	post_date VARCHAR(255),
+	post_category VARCHAR(255)
+
+)
+
+
 '''
 
 from flask import Flask,render_template,url_for,redirect,request,session
@@ -93,11 +119,11 @@ app.secret_key = 'jhgjjGDpifaj4904ufjajlwah89h392hi4lfknhflkh9842hfiu239h72h928b
 app.debug = True
 
 # Create database engine
-engine = create_engine('postgresql://danielcorcoran@localhost:5432/flask')
+engine = create_engine('postgresql://postgres:12345@localhost:5432/flask')
 
 # SQL skeletons
 select_skeleton = "SELECT * FROM users WHERE username_ = '{}'"
-insert_skeleton = "INSERT INTO users (username_, passowrd_, firstname_, lastname_, email)\
+insert_skeleton = "INSERT INTO users (username_, password_, firstname_, lastname_, email_)\
              VALUES ('{}', '{}','{}','{}','{}')"
 
 
@@ -143,7 +169,7 @@ def login():
         else:
 
             if users.shape[0] > 0:
-                database_password = users.loc[0, 'passowrd_']
+                database_password = users.loc[0, 'password_']
                 user_id = int(users.loc[0, 'id_'])
                 print("Database password is {}, attempted password is {}".format(database_password, posted_password))
                 if database_password == encrypt(posted_password):
