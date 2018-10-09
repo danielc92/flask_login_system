@@ -277,11 +277,12 @@ post_skeleton = "\
         INSERT INTO posts (post_userid, post_username, post_title, post_content, post_date, post_category) \
         VALUES ({}, '{}','{}','{}','{}', '{}')"
 
-# Blog Route
-@app.route('/blog',methods=['GET', 'POST'])
+# Create post route
+# This route will be accessible through button on Blog Route page
+@app.route('/create-post', methods = ['GET', 'POST'])
 @login_required
-def blog():
-    
+def create_post():
+
     p_error = None
 
     if request.method == 'POST':
@@ -311,17 +312,25 @@ def blog():
                     p_category))
                 trans.commit()
                 conn.close()
+
+                p_error = "Post created successfully!"
         else:
 
             p_error = "You must have a post title and post content."
 
-        # print(p_title, p_category, p_content, p_userid, p_username, p_date, sep = "\n")
-        # print(type(p_title), type(p_category), type(p_content), type(p_userid), type(p_username), type(p_date))
+    return render_template('create_post.html', session = session, p_error = p_error)
+
+# Blog Route
+@app.route('/blog', methods=['GET'])
+@login_required
+def blog():
+    
+    
 
     posts_dataframe = pandas.read_sql_query("SELECT * FROM posts", con = engine)
     posts = posts_dataframe.to_dict(orient = "records")
 
     print(posts)
 
-    return render_template('blog.html', session = session, posts = posts, p_error = p_error)
+    return render_template('blog.html', session = session, posts = posts)
 

@@ -25,10 +25,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="{{ url_for('create_post') }}">Create Thread</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('register') }}">Register</a>
                     </li>
                 </ul>
@@ -41,56 +41,31 @@
 
 
     <div class="container">
-        <form class="form-box p-2 bg-light mt-5 mx-auto" action="" method="post">
-            
-            <h2 class = "mb-3">Registration Page</h2>
-
+        <h2 class="my-4">Create a thread</h2>
+        <form class="form" method="POST">
             <div class="form-group">
-                <label>First Name:</label>
-                <br>
-                <input class = "form-control" type="text" name="rfirst" value="{{
-              request.form.rfirst }}">
+                <label>Post Title</label>
+                <input type="text" class="form-control" name="posttitle" placeholder="Title...">
             </div>
-
             <div class="form-group">
-                <label>Last Name:</label>
-                <br>
-                <input class = "form-control" type="text" name="rlast" value="{{
-
-              request.form.rlast }}">
+                <label>Post Category</label>
+                <select class="form-control" name="postcategory">
+                    <option>Food</option>
+                    <option>Health</option>
+                    <option>Education</option>
+                    <option>Leisure</option>
+                    <option>Career</option>
+                </select>
             </div>
-
             <div class="form-group">
-                <label>Email:</label>
-                <br>
-                <input class = "form-control" type="text" name="remail" value="{{
-              request.form.remail }}">
+                <label for="exampleTextarea">Post Content</label>
+                <textarea class="form-control" name="postcontent" rows="3" placeholder="Post Content..."></textarea>
             </div>
-
-            <div class="form-group">
-                <label>Username:</label>
-                <br>
-                <input class = "form-control" type="text" name="rusername" value="{{
-              request.form.rusername }}">
-            </div>
-            
-            <div class="form-group">
-                <label>Password:</label>
-                <br>
-                <input class = "form-control" type="password" name="rpassword" value="{{
-              request.form.rpassword }}">
-            </div>
-
-            
-            <div>
-                <input class="btn btn-outline-primary px-4 py-2 my-2" type="submit" value="Submit">
-            </div>
-            {% if error %}
-                <p class="small text-danger p-2 mt-1"> {{ error }} </p> 
-            {% else %}
-                <p class="small text-danger p-2 mt-1"></p>
-            {% endif %}
+            <input class="btn btn-primary px-4 py-2 my-2" type="submit" value="Submit Post">
         </form>
+        {% if p_error %}
+            <p class = "text-secondary">{{ p_error }}</p>
+        {% endif %}
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -100,4 +75,3 @@
 </body>
 
 </html>
-
